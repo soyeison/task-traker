@@ -1,13 +1,19 @@
 import csv
 from database.TaskModel import TaskDatabaseModel
+from errors.ReadCsvFileException import ReadCsvFileException
+from errors.WriteCsvFileException import WriteCsvFileException
 
 class TaskDatabaseOperations:
 
     taskList: TaskDatabaseModel = []
-    with open('database.csv', 'r', newline='\n') as fichero:
-        reader = csv.reader(fichero, delimiter=';')
-        for id, description, status, createdAt, updatedAt in reader:
-            taskList.append(TaskDatabaseModel(id, description, status, createdAt, updatedAt))
+
+    try:
+        with open('database.csv', 'r', newline='\n') as fichero:
+                reader = csv.reader(fichero, delimiter=';')
+                for id, description, status, createdAt, updatedAt in reader:
+                    taskList.append(TaskDatabaseModel(id, description, status, createdAt, updatedAt))
+    except ValueError as e:
+        print(f"Problema en la lectura de elementos: {e}")
 
     @staticmethod
     def add(task: TaskDatabaseModel):
@@ -49,7 +55,10 @@ class TaskDatabaseOperations:
 
     @staticmethod
     def save():
-        with open('database.csv', 'w', newline='\n') as fichero:
-            writer = csv.writer(fichero, delimiter=';')
-            for task in TaskDatabaseOperations.taskList:
-                writer.writerow([task.id, task.description, task.status, task.createdAt, task.updatedAt])
+        try:
+            with open('database.csv', 'w', newline='\n') as fichero:
+                writer = csv.writer(fichero, delimiter=';')
+                for task in TaskDatabaseOperations.taskList:
+                    writer.writerow([task.id, task.description, task.status, task.createdAt, task.updatedAt])
+        except IOError as e:
+            raise WriteCsvFileException(f"Error writting in CSV: {e}")

@@ -2,21 +2,37 @@ import argparse
 from database.TaskDatabase import TaskDatabaseOperations
 from database.TaskModel import TaskDatabaseModel
 from classes.TaskDomain import TaskDomain
+from errors.ArgumentNumberException import ArgumentNumberException
+from errors.WriteCsvFileException import WriteCsvFileException
 
 def main():
     parser = argparse.ArgumentParser(description="Manage your tasks CLI")
 
     parser.add_argument('operation', choices=['add', 'list', 'update', 'delete', 'mark-in-progress', 'mark-done'], help="Available operations")
-    parser.add_argument('datos', type=str, nargs='*')
+    parser.add_argument('data', type=str, nargs='*')
 
     args = parser.parse_args()
 
-    if args.operation == 'add':
-        newTask = TaskDomain(args.datos[1])
-        newTask.add()
-    elif args.operation == 'list':
-        for task in TaskDomain.list():
-            print(task)
+    try:
+        if args.operation == 'add':
+            # Validar que si se proporcionan los argumentos que son
+            # En este caso, la variable data debe contener solo 1 elemento
+            # Sino lanzar error
+            if len(args.data) != 1:
+                raise ArgumentNumberException()
+            newTask = TaskDomain(args.data[0])
+            newTask.add()
+        elif args.operation == 'list':
+            if len(args.data) > 1:
+                raise ArgumentNumberException()
+            for task in TaskDomain.list():
+                print(task)
+    except ArgumentNumberException as e:
+        print(f"Error: {e}")
+    except WriteCsvFileException as e:
+        print(f"Error: {e}")
+    except:
+        print("Otro tipo de error sucedio")
 
 
     # Ejecucion del codigo
