@@ -1,17 +1,23 @@
 import argparse
 from database.TaskDatabase import TaskDatabaseOperations
 from database.TaskModel import TaskDatabaseModel
+from classes.TaskDomain import TaskDomain
 
 def main():
-    # parser = argparse.ArgumentParser(description='Task Traker')
-    # parser.add_argument('add', help='Agregar una tarea', action=Task.create)
+    parser = argparse.ArgumentParser(description="Manage your tasks CLI")
 
-    # args = parser.parse_args()
-    # print("Parser:", args)
-    # print("Args:", args)
+    parser.add_argument('operation', choices=['add', 'list', 'update', 'delete', 'mark-in-progress', 'mark-done'], help="Available operations")
+    parser.add_argument('datos', type=str, nargs='*')
 
-    # if args.add:
-    #    print("La opcion fue add")
+    args = parser.parse_args()
+
+    if args.operation == 'add':
+        newTask = TaskDomain(args.datos[1])
+        newTask.add()
+    elif args.operation == 'list':
+        for task in TaskDomain.list():
+            print(task)
+
 
     # Ejecucion del codigo
     # newTask1 = TaskDatabaseModel(1, 'Primera tarea test', 'in-progress')
@@ -23,10 +29,10 @@ def main():
 
     # print("Esta es la tarea a eliminar:", TaskDatabaseOperations.delete('2'))
 
-    for task in TaskDatabaseOperations.list():
-        print(task)
+    # for task in TaskDatabaseOperations.list():
+    #    print(task)
 
-    print("Tarea que se va a actualizar:",TaskDatabaseOperations.update('3', 'Esta es una descripcion mas larga de la tercera tarea'))
+    # print("Tarea que se va a actualizar:",TaskDatabaseOperations.update('3', 'Esta es una descripcion mas larga de la tercera tarea'))
     
     # for task in TaskDatabaseOperations.list():
     #    print(task)

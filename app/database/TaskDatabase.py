@@ -7,12 +7,11 @@ class TaskDatabaseOperations:
     with open('database.csv', 'r', newline='\n') as fichero:
         reader = csv.reader(fichero, delimiter=';')
         for id, description, status, createdAt, updatedAt in reader:
-            taskList.append(TaskDatabaseModel(id, description, status))
+            taskList.append(TaskDatabaseModel(id, description, status, createdAt, updatedAt))
 
     @staticmethod
-    def add(id, description, status):
-        newTaskModel = TaskDatabaseModel(id, description, status)
-        TaskDatabaseOperations.taskList.append(newTaskModel)
+    def add(task: TaskDatabaseModel):
+        TaskDatabaseOperations.taskList.append(task)
         TaskDatabaseOperations.save()
 
     @staticmethod
