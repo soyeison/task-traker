@@ -1,9 +1,7 @@
 import argparse
-from database.TaskDatabase import TaskDatabaseOperations
-from database.TaskModel import TaskDatabaseModel
-from classes.TaskDomain import TaskDomain
-from errors.ArgumentNumberException import ArgumentNumberException
-from errors.WriteCsvFileException import WriteCsvFileException
+from domain.task_domain import TaskDomain
+from errors.argument_number_exception import ArgumentNumberException
+from errors.write_csv_file_exception import WriteCsvFileException
 
 def main():
     parser = argparse.ArgumentParser(description="Manage your tasks CLI")
@@ -14,14 +12,15 @@ def main():
     args = parser.parse_args()
 
     try:
+        # Validar que si se proporcionan los argumentos que son. En este caso, la variable data debe contener solo 1 elemento
         if args.operation == 'add':
-            # Validar que si se proporcionan los argumentos que son
-            # En este caso, la variable data debe contener solo 1 elemento
             # Sino lanzar error
             if len(args.data) != 1:
                 raise ArgumentNumberException()
             newTask = TaskDomain(args.data[0])
-            newTask.add()
+            taskAdded = newTask.add()
+            print(f"Task added successfully (ID: {taskAdded})")
+
         elif args.operation == 'list':
             if len(args.data) > 1:
                 raise ArgumentNumberException()

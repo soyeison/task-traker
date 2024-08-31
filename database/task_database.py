@@ -1,7 +1,6 @@
 import csv
-from database.TaskModel import TaskDatabaseModel
-from errors.ReadCsvFileException import ReadCsvFileException
-from errors.WriteCsvFileException import WriteCsvFileException
+from database.task_model import TaskDatabaseModel
+from errors.write_csv_file_exception import WriteCsvFileException
 
 class TaskDatabaseOperations:
 
