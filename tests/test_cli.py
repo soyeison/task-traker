@@ -1,28 +1,28 @@
 import os
 import csv
 import unittest
+import config
 from domain.task_domain import TaskDomain
 
 class TestCli(unittest.TestCase):
     def setUp(self):
-        self.fileName = 'test_database.csv'
+        self.fileName = config.DATABASE_FILE
         self.description = "Una nueva entrada para testear con unittest"
 
     def tearDown(self):
-        # ELiminar el archivo csv test
-        if os.path.exists(self.fileName):
-            os.remove(self.fileName)
+        # ELiminar el contenido del archivo test
+        with open(self.fileName, 'w') as file:
+            pass
 
-    def add(self):
-        print("Voy a ejecutar el test de add")
-        TaskDomain.add()
+    def test_add(self):
+        newTask = TaskDomain(self.description)
+        newTask.add()
 
         # Revisar que si se haya agregado el nuevo registro
         with open(self.fileName, 'r', newline='\n') as file:
             reader = csv.reader(file, delimiter=';')
             rows = list(reader)
-
-        self.assertEqual(rows[0].description, self.description)
+            self.assertEqual(rows[0][1], self.description)
 
 if __name__ == '__main__':
     unittest.main()

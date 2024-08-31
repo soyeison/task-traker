@@ -1,4 +1,5 @@
 import csv
+import config
 from database.task_model import TaskDatabaseModel
 from errors.write_csv_file_exception import WriteCsvFileException
 
@@ -7,7 +8,7 @@ class TaskDatabaseOperations:
     taskList: TaskDatabaseModel = []
 
     try:
-        with open('database.csv', 'r', newline='\n') as fichero:
+        with open(config.DATABASE_FILE, 'r', newline='\n') as fichero:
                 reader = csv.reader(fichero, delimiter=';')
                 for id, description, status, createdAt, updatedAt in reader:
                     taskList.append(TaskDatabaseModel(id, description, status, createdAt, updatedAt))
@@ -55,7 +56,7 @@ class TaskDatabaseOperations:
     @staticmethod
     def save():
         try:
-            with open('database.csv', 'w', newline='\n') as fichero:
+            with open(config.DATABASE_FILE, 'w', newline='\n') as fichero:
                 writer = csv.writer(fichero, delimiter=';')
                 for task in TaskDatabaseOperations.taskList:
                     writer.writerow([task.id, task.description, task.status, task.createdAt, task.updatedAt])
