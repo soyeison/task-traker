@@ -17,15 +17,17 @@ def main():
             # Sino lanzar error
             if len(args.data) != 1:
                 raise ArgumentNumberException()
-            newTask = TaskDomain(args.data[0])
-            taskAdded = newTask.add()
-            print(f"Task added successfully (ID: {taskAdded})")
+            newTask = TaskDomain.add(args.data[0])
+            print(f"Task added successfully (ID: {newTask})")
 
         elif args.operation == 'list':
             if len(args.data) > 1:
                 raise ArgumentNumberException()
             for task in TaskDomain.list():
                 print(task)
+
+        elif args.operation == 'delete':
+            print(TaskDomain.delete(args.data[0]))
     except ArgumentNumberException as e:
         print(f"Error: {e}")
     except WriteCsvFileException as e:
