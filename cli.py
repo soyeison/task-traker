@@ -1,9 +1,11 @@
 import argparse
 from domain.task_domain import TaskDomain
 from utils.validate_list_option import validate_list_option
+from utils.validate_id import validate_id
 from errors.argument_number_exception import ArgumentNumberException
 from errors.write_csv_file_exception import WriteCsvFileException
 from errors.dont_exist_task_id import DontExistTaskId
+from errors.validate_id_exception import ValidateIdException
 
 def main():
     parser = argparse.ArgumentParser(description="Manage your tasks CLI")
@@ -41,16 +43,28 @@ def main():
         elif args.operation == 'update':
             if len(args.data) == 0 or len(args.data) > 2:
                 raise ArgumentNumberException()
+            
+            if validate_id(args.data[0]) == False:
+                raise ValidateIdException(f"The id: {args.data[0]} is invalid")
+
             print(TaskDomain.update(args.data[0], args.data[1]))
         
         elif args.operation == 'mark-in-progress':
             if len(args.data) == 0 or len(args.data) > 1:
                 raise ArgumentNumberException()
+            
+            if validate_id(args.data[0]) == False:
+                raise ValidateIdException(f"The id: {args.data[0]} is invalid")
+
             print(TaskDomain.markProgress(args.data[0], 'mark-in-progress'))
 
         elif args.operation == 'mark-done':
             if len(args.data) == 0 or len(args.data) > 1:
                 raise ArgumentNumberException()
+            
+            if validate_id(args.data[0]) == False:
+                raise ValidateIdException(f"The id: {args.data[0]} is invalid")
+            
             print(TaskDomain.markProgress(args.data[0], 'mark-done'))
 
     except ArgumentNumberException as e:
@@ -59,8 +73,10 @@ def main():
         print(f"Error: {e}")
     except DontExistTaskId as e:
         print(f"Error: {e}")
+    except ValidateIdException as e:
+        print(f"Error: {e}")
     except:
-        print("Otro tipo de error sucedio")
+        print("Contact to support")
 
 
     # Ejecucion del codigo
