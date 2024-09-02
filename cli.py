@@ -16,9 +16,7 @@ def main():
     args = parser.parse_args()
 
     try:
-        # Validar que si se proporcionan los argumentos que son. En este caso, la variable data debe contener solo 1 elemento
         if args.operation == 'add':
-            # Sino lanzar error
             if len(args.data) != 1:
                 raise ArgumentNumberException()
             newTask = TaskDomain.add(args.data[0])
@@ -30,7 +28,7 @@ def main():
                     print(task)
             elif len(args.data) == 1:
                 if validate_list_option(args.data[0]) == False:
-                    raise ArgumentNumberException() # Modificar esta excepcion para agregar una particular que hable sobre opciones
+                    raise ArgumentNumberException()
                 else:
                     for task in TaskDomain.list(args.data[0]):
                         print(task)
@@ -77,25 +75,6 @@ def main():
         print(f"Error: {e}")
     except:
         print("Contact to support")
-
-
-    # Ejecucion del codigo
-    # newTask1 = TaskDatabaseModel(1, 'Primera tarea test', 'in-progress')
-    # TaskDatabaseOperations.add(newTask1.id, newTask1.description, newTask1.status)
-    # newTask2 = TaskDatabaseModel(2, 'Segunda tarea test', 'in-progress')
-    # TaskDatabaseOperations.add(newTask2.id, newTask2.description, newTask2.status)
-    # newTask3 = TaskDatabaseModel(3, 'Tercera tarea test', 'in-progress')
-    # TaskDatabaseOperations.add(newTask3.id, newTask3.description, newTask3.status)
-
-    # print("Esta es la tarea a eliminar:", TaskDatabaseOperations.delete('2'))
-
-    # for task in TaskDatabaseOperations.list():
-    #    print(task)
-
-    # print("Tarea que se va a actualizar:",TaskDatabaseOperations.update('3', 'Esta es una descripcion mas larga de la tercera tarea'))
-    
-    # for task in TaskDatabaseOperations.list():
-    #    print(task)
 
 if __name__ == '__main__':
     main()

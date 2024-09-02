@@ -14,7 +14,7 @@ class TaskDatabaseOperations:
                 for id, description, status, createdAt, updatedAt in reader:
                     taskList.append(TaskDatabaseModel(id, description, status, createdAt, updatedAt))
     except ValueError as e:
-        print(f"Problema en la lectura de elementos: {e}")
+        print(f"Problems trying read elements from database: {e}")
 
     @staticmethod
     def add(task: TaskDatabaseModel):
@@ -26,7 +26,6 @@ class TaskDatabaseOperations:
         if filter is None:
             return TaskDatabaseOperations.taskList
         else:
-            # Iterar para conseguir los que estan en el estado todo
             listToSend = []
             for task in TaskDatabaseOperations.taskList:
                 if task.status == filter:
@@ -37,10 +36,9 @@ class TaskDatabaseOperations:
     @staticmethod
     def delete(id):
         task = None
-        for i in range(len(TaskDatabaseOperations.taskList)):
-            if TaskDatabaseOperations.taskList[i].id == id:
-                task = TaskDatabaseOperations.taskList[i]
-                TaskDatabaseOperations.taskList = TaskDatabaseOperations.taskList[0:i] + TaskDatabaseOperations.taskList[i + 1:]
+        for index, task in enumerate(TaskDatabaseOperations.taskList):
+            if task.id == id:
+                task = TaskDatabaseOperations.taskList.pop(index)
                 TaskDatabaseOperations.save()
 
         if task is None:
