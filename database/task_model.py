@@ -9,4 +9,4 @@ class TaskDatabaseModel:
             self.updatedAt = updatedAt
 
     def __str__(self):
-          return f"Tarea: {self.description} - status: {self.status}"
+          return f"Tarea: {self.description} - status: {self.status} - ID: {self.id}"

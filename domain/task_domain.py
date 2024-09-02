@@ -18,7 +18,6 @@ class TaskDomain:
             raise e
         return idToSave
 
-    # Modify this method to save array of dicts
     @staticmethod
     def list(filter = None):
         if filter is None:
@@ -33,5 +32,13 @@ class TaskDomain:
     @staticmethod
     def update(id, description):
         TaskDatabaseOperations.update(id, 'description', description)
-        TaskDatabaseOperations.update(id, 'updatedAt', datetime.now())
-        return True
+        return TaskDatabaseOperations.update(id, 'updatedAt', datetime.now())
+    
+    @staticmethod
+    def markProgress(id, newstatus):
+        if newstatus == 'mark-in-progress':
+            TaskDatabaseOperations.update(id, 'status', 'in-progress')
+            return TaskDatabaseOperations.update(id, 'updatedAt', datetime.now())
+        elif newstatus == 'mark-done':
+            TaskDatabaseOperations.update(id, 'status', 'done')
+            return TaskDatabaseOperations.update(id, 'updatedAt', datetime.now())

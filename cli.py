@@ -41,7 +41,17 @@ def main():
         elif args.operation == 'update':
             if len(args.data) == 0 or len(args.data) > 2:
                 raise ArgumentNumberException()
-            TaskDomain.update(args.data[0], args.data[1])
+            print(TaskDomain.update(args.data[0], args.data[1]))
+        
+        elif args.operation == 'mark-in-progress':
+            if len(args.data) == 0 or len(args.data) > 1:
+                raise ArgumentNumberException()
+            print(TaskDomain.markProgress(args.data[0], 'mark-in-progress'))
+
+        elif args.operation == 'mark-done':
+            if len(args.data) == 0 or len(args.data) > 1:
+                raise ArgumentNumberException()
+            print(TaskDomain.markProgress(args.data[0], 'mark-done'))
 
     except ArgumentNumberException as e:
         print(f"Error: {e}")
