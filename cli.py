@@ -1,7 +1,9 @@
 import argparse
 from domain.task_domain import TaskDomain
+from utils.validate_list_option import validate_list_option
 from errors.argument_number_exception import ArgumentNumberException
 from errors.write_csv_file_exception import WriteCsvFileException
+from errors.dont_exist_task_id import DontExistTaskId
 
 def main():
     parser = argparse.ArgumentParser(description="Manage your tasks CLI")
@@ -21,16 +23,31 @@ def main():
             print(f"Task added successfully (ID: {newTask})")
 
         elif args.operation == 'list':
-            if len(args.data) > 1:
+            if len(args.data) == 0:
+                for task in TaskDomain.list():
+                    print(task)
+            elif len(args.data) == 1:
+                if validate_list_option(args.data[0]) == False:
+                    raise ArgumentNumberException() # Modificar esta excepcion para agregar una particular que hable sobre opciones
+                else:
+                    for task in TaskDomain.list(args.data[0]):
+                        print(task)
+            elif len(args.data) > 1:
                 raise ArgumentNumberException()
-            for task in TaskDomain.list():
-                print(task)
-
+            
         elif args.operation == 'delete':
             print(TaskDomain.delete(args.data[0]))
+        
+        elif args.operation == 'update':
+            if len(args.data) == 0 or len(args.data) > 2:
+                raise ArgumentNumberException()
+            TaskDomain.update(args.data[0], args.data[1])
+
     except ArgumentNumberException as e:
         print(f"Error: {e}")
     except WriteCsvFileException as e:
+        print(f"Error: {e}")
+    except DontExistTaskId as e:
         print(f"Error: {e}")
     except:
         print("Otro tipo de error sucedio")

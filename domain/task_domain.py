@@ -20,9 +20,18 @@ class TaskDomain:
 
     # Modify this method to save array of dicts
     @staticmethod
-    def list():
-        return TaskDatabaseOperations.list()
+    def list(filter = None):
+        if filter is None:
+            return TaskDatabaseOperations.list()
+        else:
+            return TaskDatabaseOperations.list(filter)
     
     @staticmethod
     def delete(id):
         return TaskDatabaseOperations.delete(str(id))
+    
+    @staticmethod
+    def update(id, description):
+        TaskDatabaseOperations.update(id, 'description', description)
+        TaskDatabaseOperations.update(id, 'updatedAt', datetime.now())
+        return True

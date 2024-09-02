@@ -2,6 +2,7 @@ import csv
 import config
 from database.task_model import TaskDatabaseModel
 from errors.write_csv_file_exception import WriteCsvFileException
+from errors.dont_exist_task_id import DontExistTaskId
 
 class TaskDatabaseOperations:
 
@@ -21,11 +22,17 @@ class TaskDatabaseOperations:
         TaskDatabaseOperations.save()
 
     @staticmethod
-    def list():
-        listToSend = []
-        for task in TaskDatabaseOperations.taskList:
-            listToSend.append(task)
-        return listToSend
+    def list(filter = None):
+        if filter is None:
+            return TaskDatabaseOperations.taskList
+        else:
+            # Iterar para conseguir los que estan en el estado todo
+            listToSend = []
+            for task in TaskDatabaseOperations.taskList:
+                if task.status == filter:
+                    listToSend.append(task)
+            return listToSend
+
     
     @staticmethod
     def delete(id):
@@ -37,20 +44,20 @@ class TaskDatabaseOperations:
                 TaskDatabaseOperations.save()
 
         if task is None:
-            return f'No se encontro la tarea con id: {id}'
+            raise DontExistTaskId(f"Don't exist task with id: {id}")
         return task
 
     @staticmethod
-    def update(id, description):
+    def update(id, attributeType, attributeValue):
         task = None
         for i in range(len(TaskDatabaseOperations.taskList)):
             if TaskDatabaseOperations.taskList[i].id == id:
                 task = TaskDatabaseOperations.taskList[i]
-                TaskDatabaseOperations.taskList[i].description = description
+                setattr(TaskDatabaseOperations.taskList[i], attributeType, attributeValue)
                 TaskDatabaseOperations.save()
 
         if task is None:
-            return f'No se encontro la tarea con id: {id}'
+            raise DontExistTaskId(f"Don't exist task with id: {id}")
         return task
 
     @staticmethod

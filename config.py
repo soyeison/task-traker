@@ -1,4 +1,4 @@
-ENVIRONMENT='test'
+ENVIRONMENT='production'
 
 DATABASE_FILE=''
 if ENVIRONMENT == 'production':
